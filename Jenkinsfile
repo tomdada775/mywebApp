@@ -42,7 +42,7 @@ pipeline {
       }
     }
 
-    stage('DEV Approve stage') {
+    stage('DEV Approve approve stage') {
       steps {
         echo "Taking approval from DEV Manager for QA Deployment"
         timeout(time: 7, unit: 'DAYS') {
@@ -51,7 +51,7 @@ pipeline {
       }
     }
 
-    stage('QA Deployment stage') {
+    stage('QA Deploy qa stage') {
       steps {
         script {
           echo "Undeploying from QA Env if already deployed"
@@ -67,7 +67,7 @@ pipeline {
       }
     }
 
-    stage('QA Approve stage') {
+    stage('QA Approve') {
       steps {
         echo "Taking approval from QA manager"
         timeout(time: 7, unit: 'DAYS') {
@@ -75,12 +75,3 @@ pipeline {
         }
       }
     }
-  }
-
-  post {
-    always {
-      echo 'Cleaning up after pipeline execution...'
-      cleanWs()
-    }
-  }
-}
