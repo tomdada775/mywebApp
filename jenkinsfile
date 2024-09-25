@@ -6,7 +6,7 @@ pipeline {
   }
 
   stages {
-    stage('Building stage one with maven') {
+    stage('Building first stage one with maven') {
       steps {
         sh 'mvn clean install -f MyWebApp/pom.xml'
       }
@@ -23,13 +23,6 @@ pipeline {
     stage('JaCoCo code coverage tool third stage') {
       steps {
         jacoco()
-      }
-    }
-
-    stage('Slack Notification for Dev Deploy') {
-      steps {
-        echo "deployed to Dev Env successfully"
-        slackSend(channel: 'devopsbuild', message: "Slack Notification for Dev Deploy Job is successful, here is the info - Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
       }
     }
 
@@ -63,14 +56,14 @@ pipeline {
         script {
           echo "Undeploying from QA Env if already deployed"
           try {
-            deploy adapters: [tomcat9(credentialsId: '5a45c954-a61d-4643-84c9-498ff0852fac', path: '', url: 'http://ec2-54-227-195-1.compute-1.amazonaws.com:8080/')], contextPath: '/MyWebApp', war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f7ae74d8-b13c-4d8b-a34c-89c16b20702c', path: '', url: 'http://ec2-3-89-252-95.compute-1.amazonaws.com:8080/')], contextPath: '/MyWebApp', war: '**/*.war'
           } catch (Exception e) {
             echo "Undeploy failed, possibly because the application is not deployed. Proceeding with deployment."
           }
         }
 
         echo "Deploying to QA Env"
-        deploy adapters: [tomcat9(credentialsId: '5a45c954-a61d-4643-84c9-498ff0852fac', path: '', url: 'http://ec2-54-227-195-1.compute-1.amazonaws.com:8080/')], contextPath: '/MyWebApp', war: '**/*.war'
+        deploy adapters: [tomcat9(credentialsId: 'f7ae74d8-b13c-4d8b-a34c-89c16b20702c', path: '', url: 'http://ec2-3-89-252-95.compute-1.amazonaws.com:8080/')], contextPath: '/MyWebApp', war: '**/*.war'
       }
     }
 
@@ -83,11 +76,3 @@ pipeline {
       }
     }
 
-    stage('Slack Notification for QA Deploy') {
-      steps {
-        echo "deployed to QA Env successfully"
-        slackSend(channel: 'devopsbuild', message: "Slack Notification for QA successful deployment Job is successful, here is the info - Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-      }
-    }
-  }
-}
