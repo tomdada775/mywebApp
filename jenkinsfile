@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   tools {
-    maven 'Maven3'
+    maven 'maven3'
   }
 
   stages {
@@ -42,7 +42,7 @@ pipeline {
       }
     }
 
-    stage('DEV Approve approve stage') {
+    stage('DEV Approve stage') {
       steps {
         echo "Taking approval from DEV Manager for QA Deployment"
         timeout(time: 7, unit: 'DAYS') {
@@ -51,7 +51,7 @@ pipeline {
       }
     }
 
-    stage('QA Deploy qa stage') {
+    stage('QA Deployment stage') {
       steps {
         script {
           echo "Undeploying from QA Env if already deployed"
@@ -67,7 +67,7 @@ pipeline {
       }
     }
 
-    stage('QA Approve') {
+    stage('QA Approve stage') {
       steps {
         echo "Taking approval from QA manager"
         timeout(time: 7, unit: 'DAYS') {
@@ -75,4 +75,12 @@ pipeline {
         }
       }
     }
+  }
 
+  post {
+    always {
+      echo 'Cleaning up after pipeline execution...'
+      cleanWs()
+    }
+  }
+}
