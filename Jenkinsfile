@@ -4,44 +4,38 @@ pipeline {
   tools {
     maven 'maven3'
   }
-
   stages {
     stage('Building first stage one with maven') {
       steps {
         sh 'mvn clean install -f mywebApp/pom.xml'
       }
     }
-
     stage('Code Quality with SonarQube second stage') {
       steps {
         withSonarQubeEnv('SonarQube') {
-          sh 'mvn -f MyWebApp/pom.xml sonar:sonar'
+        sh 'mvn -f MyWebApp/pom.xml sonar:sonar'
         }
       }
     }
-
     stage('JaCoCo code coverage tool third stage') {
       steps {
-        jacoco()
+      jacoco()
       }
     }
-
     stage('DEV Deployment fourth stage') {
       steps {
-        script {
-          echo "Undeploying from DEV Env if already deployed"
+      script {
+         echo "Undeploying from DEV Env if already deployed"
           try {
             deploy adapters: [tomcat9(credentialsId: 'f7ae74d8-b13c-4d8b-a34c-89c16b20702c', path: '', url: 'http://ec2-184-73-93-131.compute-1.amazonaws.com:9000/')], contextPath: '/MyWebApp', war: '**/*.war'
           } catch (Exception e) {
             echo "Undeploy failed, possibly because the application is not deployed. Proceeding with deployment."
           }
         }
-
         echo "Deploying to DEV Env"
         deploy adapters: [tomcat9(credentialsId: 'f7ae74d8-b13c-4d8b-a34c-89c16b20702c', path: '', url: 'http://ec2-184-73-93-131.compute-1.amazonaws.com:9000/')], contextPath: '/MyWebApp', war: '**/*.war'
       }
     }
-
     stage('DEV Approve approve stage') {
       steps {
         echo "Taking approval from DEV Manager for QA Deployment"
