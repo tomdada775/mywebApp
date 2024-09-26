@@ -31,14 +31,14 @@ pipeline {
         script {
           echo "Undeploying from DEV Env if already deployed"
           try {
-            deploy adapters: [tomcat9(credentialsId: 'f7ae74d8-b13c-4d8b-a34c-89c16b20702c', path: '', url: 'http://ec2-54-227-195-1.compute-1.amazonaws.com:8080/')], contextPath: '/MyWebApp', war: '**/*.war'
+            deploy adapters: [tomcat9(credentialsId: 'f7ae74d8-b13c-4d8b-a34c-89c16b20702c', path: '', url: 'http://ec2-184-73-93-131.compute-1.amazonaws.com:9000/')], contextPath: '/MyWebApp', war: '**/*.war'
           } catch (Exception e) {
             echo "Undeploy failed, possibly because the application is not deployed. Proceeding with deployment."
           }
         }
 
         echo "Deploying to DEV Env"
-        deploy adapters: [tomcat9(credentialsId: 'f7ae74d8-b13c-4d8b-a34c-89c16b20702c', path: '', url: 'http://ec2-54-227-195-1.compute-1.amazonaws.com:8080/')], contextPath: '/MyWebApp', war: '**/*.war'
+        deploy adapters: [tomcat9(credentialsId: 'f7ae74d8-b13c-4d8b-a34c-89c16b20702c', path: '', url: 'http://ec2-184-73-93-131.compute-1.amazonaws.com:9000/')], contextPath: '/MyWebApp', war: '**/*.war'
       }
     }
 
