@@ -8,14 +8,14 @@ pipeline {
   stages {
     stage('Building first stage one with maven') {
       steps {
-        sh 'mvn clean install -x -f mywebApp/pom.xml'
+        sh 'mvn clean install -f mywebApp/pom.xml'
       }
     }
 
     stage('Code Quality with SonarQube second stage') {
       steps {
         withSonarQubeEnv('SonarQube') {
-          sh 'mvn -x -f MyWebApp/pom.xml sonar:sonar'
+          sh 'mvn -f MyWebApp/pom.xml sonar:sonar'
         }
       }
     }
